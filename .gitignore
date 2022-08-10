@@ -1,0 +1,57 @@
+.encryptedKey.json
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# misc
+.DS_Store
+*.pem
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# testing
+/coverage
+
+# typescript
+*.tsbuildinfo
+
+front-end-typescript/.next
+front-end-typescript/node_modules
+front-end-typescript/graph-nft-marketplace/node_modules
+typechain-types
+
+# vercel
+.vercel
+
+.env
+artifacts
+cache
+coverage.json
+
+front-end/node_modules
+frp
+frpc.ini
+front-end/testMoralis.html
+front-end-typescript/node_modules
+front-end-typescript/nft-marketplace-graph/node_modules
+front-end/nft-marketplace-graph/node_modules
+deployments
