@@ -153,4 +153,17 @@ contract NFTMarketplace {
         (bool success, ) = payable(msg.sender).call{value: proceeds}("");
         if (!success) revert NFTMarketplace__TransferFailed();
     }
+
+    // Getters
+    function getListing(address tokenAddress, uint256 tokenId)
+        external
+        view
+        returns (Listing memory)
+    {
+        return s_listings[tokenAddress][tokenId];
+    }
+
+    function getProceeds(address seller) external view returns (uint256) {
+        return s_proceeds[seller];
+    }
 }
