@@ -6,10 +6,6 @@ require("hardhat-gas-reporter");
 require("hardhat-contract-sizer");
 require("dotenv").config();
 
-/**
- * @type import('hardhat/config').HardhatUserConfig
- */
-
 const MAINNET_RPC_URL =
     process.env.MAINNET_RPC_URL ||
     process.env.ALCHEMY_MAINNET_RPC_URL ||
@@ -55,6 +51,7 @@ module.exports = {
             // },
             saveDeployments: true,
             chainId: 42,
+            blockConfirmations: 6,
         },
         rinkeby: {
             url: RINKEBY_RPC_URL,
@@ -64,6 +61,7 @@ module.exports = {
             //   },
             saveDeployments: true,
             chainId: 4,
+            blockConfirmations: 6,
         },
         mainnet: {
             url: MAINNET_RPC_URL,
@@ -73,6 +71,7 @@ module.exports = {
             //   },
             saveDeployments: true,
             chainId: 1,
+            blockConfirmations: 6,
         },
         polygon: {
             url: POLYGON_MAINNET_RPC_URL,
