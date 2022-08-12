@@ -4,6 +4,7 @@ pragma solidity ^0.8.15;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 error NFTMarketplace__AlreadyListed(address tokenAddress, uint256 tokenId);
+error NFTMarketplace__NoProceeds();
 error NFTMarketplace__NotApprovedForMarketplace();
 error NFTMarketplace__NotListed(address tokenAddress, uint256 tokenId);
 error NFTMarketplace__NotOwner();
@@ -13,6 +14,7 @@ error NFTMarketplace__PriceNotMet(
     uint256 tokenId,
     uint256 price
 );
+error NFTMarketplace__TransferFailed();
 
 contract NFTMarketplace {
     struct Listing {
@@ -32,6 +34,12 @@ contract NFTMarketplace {
         address indexed tokenAddress,
         uint256 indexed tokenId,
         uint256 price
+    );
+
+    event ItemCanceled(
+        address indexed seller,
+        address indexed tokenAddress,
+        uint256 indexed tokenId
     );
 
     // NFT Address -> NFT Id. -> Listing
@@ -114,5 +122,35 @@ contract NFTMarketplace {
             tokenId
         );
         emit ItemBought(msg.sender, tokenAddress, tokenId, listedItem.price);
+    }
+
+    function cancelListing(address tokenAddress, uint256 tokenId)
+        external
+        isOwner(tokenAddress, tokenId, msg.sender)
+        isListed(tokenAddress, tokenId)
+    {
+        delete (s_listings[tokenAddress][tokenId]);
+        emit ItemCanceled(msg.sender, tokenAddress, tokenId);
+    }
+
+    function updateListing(
+        address tokenAddress,
+        uint256 tokenId,
+        uint256 newPrice
+    )
+        external
+        isListed(tokenAddress, tokenId)
+        isOwner(tokenAddress, tokenId, msg.sender)
+    {
+        s_listings[tokenAddress][tokenId].price = newPrice;
+        emit ItemListed(msg.sender, tokenAddress, tokenId, newPrice);
+    }
+
+    function withdrawProceeds() external {
+        uint256 proceeds = s_proceeds[msg.sender];
+        if (proceeds <= 0) revert NFTMarketplace__NoProceeds();
+        s_proceeds[msg.sender] = 0;
+        (bool success, ) = payable(msg.sender).call{value: proceeds}("");
+        if (!success) revert NFTMarketplace__TransferFailed();
     }
 }
